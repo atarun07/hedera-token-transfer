@@ -3,7 +3,9 @@ import MyGroup from "./components/MyGroup.jsx";
 import walletConnectFcn from "./components/hedera/walletConnect.js";
 import tokenCreateFcn from "./components/hedera/tokenCreate.js";
 import tokenMintFcn from "./components/hedera/tokenMint.js";
+import topicMintFcn from "./components/hedera/topiccreate.js";
 import contractDeployFcn from "./components/hedera/contractDeploy.js";
+import contractDeployNFTFcn from "./components/hedera/deployNFTcontract.js";
 import contractExecuteFcn from "./components/hedera/contractExecute.js";
 import "./styles/App.css";
 
@@ -13,16 +15,20 @@ function App() {
 	const [tokenId, setTokenId] = useState();
 	const [tokenSupply, setTokenSupply] = useState();
 	const [contractId, setContractId] = useState();
+	const [NFTcontractId, NFTsetContractId] = useState();
 
 	const [connectTextSt, setConnectTextSt] = useState("🔌 Connect here...");
+	const [NFTContractTextSt, setNFTContractTextSt] = useState("");
 	const [createTextSt, setCreateTextSt] = useState("");
 	const [mintTextSt, setMintTextSt] = useState("");
+	const [mintTopicSt, setTopicTextSt] = useState("");
 	const [contractTextSt, setContractTextSt] = useState();
 	const [trasnferTextSt, setTransferTextSt] = useState();
 
 	const [connectLinkSt, setConnectLinkSt] = useState("");
 	const [createLinkSt, setCreateLinkSt] = useState("");
 	const [mintLinkSt, setMintLinkSt] = useState("");
+	const [topicLinkSt, settopicLinkSt] = useState("");
 	const [contractLinkSt, setContractLinkSt] = useState();
 	const [trasnferLinkSt, setTransferLinkSt] = useState();
 
@@ -43,6 +49,22 @@ function App() {
 			setCreateTextSt();
 		}
 	}
+
+	async function contractDeployNFT() {
+	console.log(`- hi`);	
+	if (NFTcontractId !== undefined) {
+		setNFTContractTextSt(`You already have deployed the contract ${NFTcontractId} ✅`);
+	} else if (accountId === undefined) {
+		setCreateTextSt(`🛑 Connect a wallet first! 🛑`);
+	} else {
+		console.log(`- hi`);
+		const [NFTcontractId,txIdRaw] = await contractDeployNFTFcn(walletData, accountId);
+		NFTsetContractId(NFTcontractId);
+		console.log(`- Deployed Succesfully id: ${NFTcontractId}`);
+		setNFTContractTextSt(`Successfully deployed NFT smart contract with ID: ${NFTcontractId} ✅`);
+		}
+	}
+
 
 	async function tokenCreate() {
 		if (tokenId !== undefined) {
@@ -73,6 +95,18 @@ function App() {
 			setMintLinkSt(`https://hashscan.io/#/testnet/transaction/${txId}`);
 		}
 	}
+	async function topicMint() {
+		if (tokenId === undefined) {
+			setTopicTextSt("🛑 Create a token first! 🛑");
+		} else {
+			const [topicId] = await topicMintFcn(walletData, accountId);
+			setTokenSupply(supply);
+			setTopicTextSt(`The newe topic ID is ${topicId}! ✅`);
+			const txId = prettify(txIdRaw);
+			settopicLinkSt(`https://hashscan.io/#/testnet/transaction/${txId}`);
+		}
+	}
+
 
 	async function contractDeploy() {
 		if (tokenId === undefined) {
@@ -117,6 +151,13 @@ function App() {
 			/>
 
 			<MyGroup
+				fcn={contractDeployNFT}
+				buttonLabel={"Deploy NFT Contract"}
+				text={NFTContractTextSt}
+				//link={createLinkSt}
+			/>
+
+			<MyGroup
 				fcn={tokenCreate}
 				buttonLabel={"Create New Token"}
 				text={createTextSt}
@@ -129,6 +170,13 @@ function App() {
 				text={mintTextSt}
 				link={mintLinkSt}
 			/>
+
+			<MyGroup
+				fcn={topicMint}
+				buttonLabel={"Create Topic"}
+				text={mintTopicSt}
+				link={topicLinkSt}
+			/>			
 
 			<MyGroup
 				fcn={contractDeploy}
