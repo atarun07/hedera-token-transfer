@@ -7,6 +7,8 @@ import topicMintFcn from "./components/hedera/topiccreate.js";
 import contractDeployFcn from "./components/hedera/contractDeploy.js";
 import contractDeployNFTFcn from "./components/hedera/deployNFTcontract.js";
 import contractExecuteFcn from "./components/hedera/contractExecute.js";
+import MirrorNodeClient  from "./components/hedera/mirrorNodeClient.js";
+
 import "./styles/App.css";
 
 function App() {
@@ -90,22 +92,22 @@ function App() {
 		} else {
 			const [supply, txIdRaw] = await tokenMintFcn(walletData, accountId, tokenId);
 			setTokenSupply(supply);
-			setMintTextSt(`Supply of token ${tokenId} is ${supply}! ✅`);
+			setMintTextSt(`Token Minted Succesfully with ID ${tokenId}! ✅`);
 			const txId = prettify(txIdRaw);
 			setMintLinkSt(`https://hashscan.io/#/testnet/transaction/${txId}`);
 		}
 	}
-	async function topicMint() {
-		if (tokenId === undefined) {
-			setTopicTextSt("🛑 Create a token first! 🛑");
-		} else {
-			const [topicId] = await topicMintFcn(walletData, accountId);
-			setTokenSupply(supply);
-			setTopicTextSt(`The newe topic ID is ${topicId}! ✅`);
-			const txId = prettify(txIdRaw);
-			settopicLinkSt(`https://hashscan.io/#/testnet/transaction/${txId}`);
-		}
-	}
+	// async function topicMint() {
+	// 	if (tokenId === undefined) {
+	// 		setTopicTextSt("🛑 Create a token first! 🛑");
+	// 	} else {
+	// 		const [topicId] = await topicMintFcn(walletData, accountId);
+	// 		setTokenSupply(supply);
+	// 		setTopicTextSt(`The newe topic ID is ${topicId}! ✅`);
+	// 		const txId = prettify(txIdRaw);
+	// 		settopicLinkSt(`https://hashscan.io/#/testnet/transaction/${txId}`);
+	// 	}
+	// }
 
 
 	async function contractDeploy() {
@@ -142,48 +144,42 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1 className="header">Let's buidl a dapp on Hedera!</h1>
+			<h1 className="header">User Interface</h1>
 			<MyGroup
 				fcn={connectWallet}
 				buttonLabel={"Connect Wallet"}
 				text={connectTextSt}
 				link={connectLinkSt}
 			/>
+		
 
-			<MyGroup
+			{/* <MyGroup
 				fcn={contractDeployNFT}
 				buttonLabel={"Deploy NFT Contract"}
 				text={NFTContractTextSt}
 				//link={createLinkSt}
-			/>
+			/> */}
 
 			<MyGroup
 				fcn={tokenCreate}
-				buttonLabel={"Create New Token"}
+				buttonLabel={"Create New Cycle Token"}
 				text={createTextSt}
 				link={createLinkSt}
 			/>
 
 			<MyGroup
 				fcn={tokenMint}
-				buttonLabel={"Mint 100 New Tokens"}
+				buttonLabel={"Mint Cycle Token"}
 				text={mintTextSt}
 				link={mintLinkSt}
 			/>
 
-			<MyGroup
-				fcn={topicMint}
-				buttonLabel={"Create Topic"}
-				text={mintTopicSt}
-				link={topicLinkSt}
-			/>			
-
-			<MyGroup
+			{/* <MyGroup
 				fcn={contractDeploy}
 				buttonLabel={"Deploy Contract"}
 				text={contractTextSt}
 				link={contractLinkSt}
-			/>
+			/> */}
 
 			<MyGroup
 				fcn={contractExecute}

@@ -1,3 +1,4 @@
+import BYTECODE_DEPLOY from "./bytecode.js";
 import BYTECODE_NFT from "./bytecode2.js";
 import {
   ContractCreateFlow,
@@ -46,6 +47,16 @@ async function contractDeployNFTFcn(walletData, accountId) {
     `- The smart contract ID in Solidity format is: ${contractAddress} \n`
   );
 
+  //   // Create contract
+  //   const createContract = new ContractCreateFlow()
+  //     .setGas(4000000) // Increase if revert
+  //     .setBytecode(BYTECODE_NFT) // Contract bytecode
+  //     .freezeWithSigner(signer);
+  //   const createContractTx = await createContract.execute(signer);
+  //   const createContractRx = await createContractTx.getReceipt(signer);
+  //   const cId = createContractRx.contractId;
+
+  //   console.log(`Contract created with ID: ${cId} \n`);
   return [cId, contractCreateSubmit.transactionId];
 }
 export default contractDeployNFTFcn;
